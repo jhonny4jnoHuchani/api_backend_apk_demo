@@ -1,15 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { UsersModule } from './users/users.module.js';
 import { TokensModule } from './tokens/tokens.module.js';
 import { HistorialModule } from './historial/historial.module.js';
 import { AuthModule } from './auth/auth.module.js';
-
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
@@ -31,11 +28,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         synchronize: String(configService.get('DB_SYNCHRONIZE', 'true')) === 'true',
         logging: String(configService.get('DB_LOGGING', 'false')) === 'true',
       }),
-    }),
-    ObserveModule.forRoot({
-      appKey: 'YOUR_APP_KEY',
-      appSecret: 'YOUR_APP_SECRET',
-      serviceId: 'upea-token-service',
     }),
     AuthModule,
     UsersModule,
