@@ -1,0 +1,25 @@
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { AppModule, ObserveInstrument } from './app.module.js';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    instrument: ObserveInstrument,
+  });
+
+  // Habilitar CORS para permitir solicitudes desde la app móvil y Laravel
+  app.enableCors();
+
+  // Validación automática de DTOs
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  console.log(`Microservicio de seguridad UPEA corriendo en el puerto ${port}`);
+}
+await bootstrap();
