@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
+  type Relation,
 } from 'typeorm';
 import { Token } from '../../tokens/entities/token.entity.js';
 import { Historial } from '../../historial/entities/historial.entity.js';
@@ -62,8 +63,8 @@ export class AppUser {
   actualizado_en: Date;
 
   @OneToMany(() => Token, (token) => token.appUser)
-  tokens: Token[];
+  tokens: Relation<Token[]>;
 
   @OneToMany(() => Historial, (historial) => historial.appUser)
-  historiales: Historial[];
+  historiales: Relation<Historial[]>;
 }

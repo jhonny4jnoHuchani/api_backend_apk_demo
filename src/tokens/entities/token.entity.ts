@@ -7,6 +7,7 @@ import {
   JoinColumn,
   BeforeInsert,
   Index,
+  type Relation,
 } from 'typeorm';
 import { AppUser } from '../../users/entities/app-user.entity.js';
 
@@ -36,7 +37,7 @@ export class Token {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'app_user_id' })
-  appUser: AppUser;
+  appUser: Relation<AppUser>;
 
   @Column({
     type: 'varchar',
