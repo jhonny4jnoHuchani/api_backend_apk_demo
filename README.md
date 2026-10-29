@@ -1,114 +1,216 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛡️ UPEA Token Service — Microservicio de Seguridad y Tokenización OTP
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Microservicio backend de alto rendimiento desarrollado con **NestJS**, **TypeORM** y **MySQL**. Proporciona el núcleo de seguridad para el ecosistema universitario UPEA: autenticación con vinculación estricta de hardware (**Device Binding**), generación de tokens de un solo uso (**TOTP/OTP** de 6 dígitos) y validación en tiempo real para el sistema académico y la aplicación móvil.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 📋 Requisitos Previos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Antes de comenzar la instalación en tu entorno de desarrollo, asegúrate de contar con:
 
-## Project setup
+- **Node.js**: Versión `v18.0.0` o superior (Recomendado `v20.x` LTS o `v22.x`).
+- **npm**: Versión `9.x` o superior (incluido con Node.js).
+- **MySQL / MariaDB**: Versión `8.0+` o MariaDB `10.4+` (puedes usar XAMPP, Laragon, Docker o MySQL Server local en el puerto `3306`).
+- **Git** (opcional, para clonado y control de versiones).
 
+---
+
+## 🚀 Paso a Paso: Configuración para Modo Desarrollador
+
+Sigue estos pasos en orden para dejar el servicio 100% operativo:
+
+### 1. Ubicarse en el directorio del proyecto
+Abre una terminal (PowerShell, Bash o CMD) en la raíz del microservicio:
 ```bash
-$ npm install
+cd d:/TRABAJO/upea-token-service
 ```
 
-## Compile and run the project
-
+### 2. Instalar dependencias de Node.js
+Ejecuta la instalación limpia de los paquetes declarados en `package.json`:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Configurar las Variables de Entorno (`.env`)
+El proyecto incluye una plantilla `.env.example`. Crea tu archivo `.env` local:
 
+En Windows (PowerShell):
+```powershell
+Copy-Item .env.example .env
+```
+O en Bash / CMD:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Abre el archivo `.env` y ajusta las credenciales de tu servidor de base de datos MySQL:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```env
+# Configuración del Servidor
+PORT=3000
+NODE_ENV=development
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# Conexión MySQL / MariaDB (ej. XAMPP por defecto: user=root, password vacío)
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=upea_security_db
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Sincronización automática de TypeORM (true solo en desarrollo local)
+DB_SYNCHRONIZE=true
+
+# Logs de consultas SQL en terminal (true / false)
+DB_LOGGING=true
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+> [!NOTE]
+> En entornos locales con XAMPP, habitualmente `DB_USER=root` y `DB_PASSWORD=` se mantiene en blanco. Si usas contraseña de root o un usuario dedicado en MySQL, colócalo aquí.
 
-## Observability
+---
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+## 🗄️ Creación y Migración de la Base de Datos
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+El microservicio cuenta con un flujo automatizado para inicializar la base de datos y generar todas las tablas:
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+### Paso A: Crear la Base de Datos en MySQL
+Asegúrate de que tu servicio MySQL esté iniciado (ej. botón **Start** de MySQL en el panel de XAMPP). Luego ejecuta:
 
-## Resources
+```bash
+npm run db:create
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Este comando ejecuta el script `scripts/create-db.js`, el cual se conecta a MySQL y crea la base de datos `upea_security_db` con el conjunto de caracteres adecuado si aún no existe.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Paso B: Migración / Sincronización de Tablas
+Este proyecto utiliza **TypeORM** con sincronización automática en desarrollo (`DB_SYNCHRONIZE=true` en `.env`).
 
-## Support
+Al iniciar el servidor en modo desarrollo (Paso 4 a continuación), TypeORM detectará automáticamente los modelos y creará o actualizará las siguientes tablas con sus índices y relaciones foráneas:
+1. `app_users`: Registro de usuarios autorizados, contraseñas encriptadas y vinculación del hardware (`device_id`).
+2. `tokens`: Almacén de códigos OTP de 6 dígitos, hash criptográfico, tiempo de vida (TTL) y estado (`PENDIENTE`, `USADO`, `EXPIRADO`).
+3. `historial`: Auditoría transaccional de cada generación y validación de tokens.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+> [!TIP]
+> Si en algún momento modificas las entidades en `src/**/*.entity.ts`, TypeORM actualizará las tablas automáticamente sin necesidad de scripts manuales de migración en modo desarrollo.
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 💻 Comandos para Ejecutar el Proyecto
 
-## License
+### Modo Desarrollador (Watch Mode con recarga en vivo)
+Para iniciar el microservicio observando cambios en el código TypeScript:
+```bash
+npm run start:dev
+```
+*(También puedes usar el alias `npm run serve`)*.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Verás en consola:
+```text
+Microservicio de seguridad UPEA corriendo en el puerto 3000
+```
+La API estará escuchando en `http://localhost:3000` (o `http://127.0.0.1:3000`).
+
+### Modo Debug (Depuración con Inspect)
+```bash
+npm run start:debug
+```
+
+### Compilar y Ejecutar en Modo Producción
+```bash
+npm run build
+npm run start:prod
+```
+
+---
+
+## 🧪 Pruebas Automatizadas y Linter
+
+El proyecto utiliza **Vitest** y **oxlint** para máxima velocidad y fiabilidad:
+
+```bash
+# Ejecutar suite de pruebas unitarias
+npm run test
+
+# Ejecutar pruebas en modo interactivo (watch)
+npm run test:watch
+
+# Ver reporte de cobertura de código
+npm run test:cov
+
+# Ejecutar pruebas End-to-End (E2E)
+npm run test:e2e
+
+# Validar calidad de código y buenas prácticas con oxlint
+npm run lint
+
+# Formatear código con Prettier
+npm run format
+```
+
+---
+
+## 📡 Endpoints de la API REST
+
+| Método | Ruta | Descripción | Consumidor Principal |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Registro inicial de credenciales de usuario móvil | App Móvil / Kardex |
+| `POST` | `/api/auth/login-device` | Autenticación con validación de hardware (**Device Binding**) | App Móvil React Native |
+| `POST` | `/api/tokens/generate` | Generación de token OTP dinámico de 6 dígitos | App Móvil React Native |
+| `POST` | `/api/tokens/validate` | Verificación de validez y consumo de token OTP | Sistema Académico Laravel |
+
+### Ejemplo: Validar Token (Consumo desde Laravel)
+```http
+POST /api/tokens/validate HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+  "identificador_sistema": "30009999",
+  "codigo": "489215"
+}
+```
+
+Respuesta esperada:
+```json
+{
+  "valido": true,
+  "mensaje": "Token validado y consumido exitosamente",
+  "timestamp": "2026-10-29T05:20:00.000Z"
+}
+```
+
+---
+
+## 🔗 Relación con los Otros Proyectos
+
+```text
+       ┌────────────────────────┐
+       │   sistema-academico    │  (Laravel 11 + Vue)
+       │    Puerto: 8000        │
+       └───────────┬────────────┘
+                   │
+                   │ Valida OTP al confirmar operaciones críticas
+                   ▼
+       ┌────────────────────────┐
+       │   upea-token-service   │◄──── Genera OTP & Vincula Dispositivo
+       │    Puerto: 3000        │      (Device Binding)
+       └────────────────────────┘
+                   ▲
+                   │
+       ┌───────────┴────────────┐
+       │    upea-token-app      │  (React Native / Expo)
+       │   Puerto Web: 8081     │
+       └────────────────────────┘
+```
+
+---
+
+## ❓ Preguntas Frecuentes y Solución de Problemas
+
+1. **Error: `connect ECONNREFUSED 127.0.0.1:3306`**:
+   - Asegúrate de haber iniciado MySQL en XAMPP o como servicio de Windows.
+   - Verifica que el puerto en el archivo `.env` (`DB_PORT=3306`) coincida con tu configuración.
+2. **Error: `Access denied for user 'root'@'localhost'`**:
+   - Revisa si tu usuario `root` tiene contraseña configurada. Si es así, colócala en `DB_PASSWORD=tu_password` dentro de `.env`.
+3. **¿Cómo limpiar la base de datos de prueba?**:
+   - Puedes eliminar la base de datos ejecutando `DROP DATABASE upea_security_db;` en phpMyAdmin/MySQL Workbench y volver a correr `npm run db:create` seguido de `npm run start:dev`.
